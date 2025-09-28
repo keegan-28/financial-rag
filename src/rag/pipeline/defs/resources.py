@@ -4,14 +4,14 @@ from src.rag.database_interaction.vector_store_factory import VectorStoreFactory
 from langchain_community.vectorstores import Chroma
 
 
-class DocumentStoreResource(ConfigurableResource):
+class DocumentStoreResource(ConfigurableResource):  # noqa
     database_path: str
 
     def get_client(self) -> DocumentStore:
         return DocumentStore(database_path=self.database_path)
 
 
-class VectorStoreResource(ConfigurableResource):
+class VectorStoreResource(ConfigurableResource):  # noqa
     collection_name: str
     database_path: str
     api_key: str

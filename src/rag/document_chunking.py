@@ -21,7 +21,7 @@ class DocumentSplitter(ABC):
     add_start_index: bool = True
 
     @abstractmethod
-    def __init__(self):
+    def __init__(self) -> None:
         pass
 
     @abstractmethod
@@ -57,7 +57,7 @@ class RecursiveSplitter(DocumentSplitter):
         docs: list[Document] = self.splitter.create_documents(
             [text.page_content], metadatas=[text.metadata] if text.metadata else None
         )
-        return self._add_metadata(docs, text.id, "RECURSIVE")
+        return self._add_metadata(docs, UUID(text.id), "RECURSIVE")
 
 
 class SemanticSplitter(DocumentSplitter):
@@ -88,4 +88,4 @@ class SemanticSplitter(DocumentSplitter):
         docs: list[Document] = self.splitter.create_documents(
             [text.page_content], metadatas=[text.metadata] if text.metadata else None
         )
-        return self._add_metadata(docs, text.id, "SEMANTIC")
+        return self._add_metadata(docs, UUID(text.id), "SEMANTIC")

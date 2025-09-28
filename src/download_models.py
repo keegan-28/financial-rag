@@ -3,7 +3,7 @@ import os
 from src.rag.utils import logger
 
 
-def download_embedding_model(model_name: str, save_dir: str):
+def download_embedding_model(model_name: str, save_dir: str) -> None:
     """
     Download and save a SentenceTransformer embedding model from Hugging Face.
     """

@@ -9,13 +9,13 @@ wheels/
 
 # Virtual environments
 .venv
+.env
 
 # Code generated files
 models/*
 databases/*
 data/*
 .dagster-home/
-.env
 
 !models/.gitkeep
 !databases/.gitkeep
