@@ -11,8 +11,13 @@ wheels/
 .venv
 
 # Code generated files
-databases/
-data/
+models/*
+databases/*
+data/*
 .dagster-home/
 .env
 models/
+
+!models/.gitkeep
+!database/.gitkeep
+!data/.gitkeep
