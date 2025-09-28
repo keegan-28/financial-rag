@@ -1,0 +1,34 @@
+[project]
+name = "financial-rag"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "chromadb>=1.1.0",
+    "dagster>=1.11.12",
+    "dagster-webserver>=1.11.12",
+    "langchain>=0.3.27",
+    "langchain-community>=0.3.30",
+    "langchain-experimental>=0.3.4",
+    "langchain-google-genai>=2.1.12",
+    "langchain-huggingface>=0.3.1",
+    "pypdf>=6.1.0",
+    "sentence-transformers>=5.1.1",
+    "sqlmodel>=0.0.25",
+    "torch>=2.8.0",
+    "transformers>=4.56.2",
+]
+
+[dependency-groups]
+dev = [
+    "ruff>=0.13.2",
+]
+
+[tool.dg]
+directory_type="project"
+
+[tool.dg.project]
+root_module="src.rag"
+defs_module="src.rag.pipeline.defs"
+code_location_target_module="src.rag.pipeline.defs.definitions"
