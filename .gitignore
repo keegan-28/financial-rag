@@ -16,8 +16,7 @@ databases/*
 data/*
 .dagster-home/
 .env
-models/
 
 !models/.gitkeep
-!database/.gitkeep
+!databases/.gitkeep
 !data/.gitkeep
