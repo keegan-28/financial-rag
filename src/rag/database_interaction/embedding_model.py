@@ -9,7 +9,8 @@ if "GOOGLE_API_KEY" not in os.environ:
 
 
 embedding_model_local = HuggingFaceEmbeddings(
-    model_name="./models/all-MiniLM-L6-v2", model_kwargs={"device": "cpu"}
+    model_name="./models/all-MiniLM-L6-v2",
+    model_kwargs={"device": "cpu"},
 )
 
 

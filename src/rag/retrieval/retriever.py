@@ -15,6 +15,7 @@ from src.rag.retrieval.utils import (
     format_cited_answer,
     fetch_parent_docs_wrapper,
     format_docs_with_weight,
+    weight_chunks_by_parent,
 )
 
 rephrase_query = RunnableSequence(REPHRASE_PROMPT | llm | StrOutputParser())
@@ -27,6 +28,14 @@ retrieve = RunnableParallel(
     docs=child_retriever,
     query=RunnablePassthrough(),
     original_query=RunnablePassthrough(),
+)
+
+rerank_by_parent = RunnableLambda(
+    lambda d: {
+        "docs": weight_chunks_by_parent(d["docs"]),
+        "query": d["query"],
+        "original_query": d["original_query"],
+    }
 )
 
 fetch_parents = RunnableLambda(fetch_parent_docs_wrapper)
@@ -46,7 +55,7 @@ query_llm = RunnableParallel(
     original_query=RunnableLambda(lambda d: d["original_query"]),
 )
 
-chain = retrieve | fetch_parents | format_context | query_llm
+chain = retrieve | rerank_by_parent | fetch_parents | format_context | query_llm
 
 if __name__ == "__main__":
     try:
