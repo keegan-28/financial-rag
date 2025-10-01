@@ -11,16 +11,21 @@ class ChildDocuments(ChunkMetadata, SQLModel, table=True):
     text: str
 
 
+class ParentDocuments(ChunkMetadata, SQLModel, table=True):
+    id: str = Field(primary_key=True)
+    text: str
+
+
 class DocumentStore:
     def __init__(self, database_path: str):
         self.db_uri = f"{BASE_DB_URI}{database_path}"
         self.engine = create_engine(self.db_uri)
         SQLModel.metadata.create_all(self.engine)
 
-    def write_documents(self, docs: list[Document]) -> None:
+    def write_documents(self, docs: list[Document], table) -> None:
         inserts = []
         for i, doc in enumerate(docs):
-            row = ChildDocuments(
+            row = table(
                 id=str(doc.metadata.get("id")),
                 text=doc.page_content,
                 chunk_index=int(doc.metadata.get("chunk_index", i)),
@@ -37,10 +42,10 @@ class DocumentStore:
                 session.merge(row)
             session.commit()
 
-    def read_documents(self, chunk_ids: list[str]) -> list[Document]:
+    def read_documents(self, chunk_ids: list[str], table) -> list[Document]:
         documents = []
         with Session(self.engine) as session:
-            statement = select(ChildDocuments).where(ChildDocuments.id.in_(chunk_ids))  # noqa
+            statement = select(table).where(table.id.in_(chunk_ids))  # noqa
             results = session.exec(statement).all()
             for row in results:
                 doc = Document(

@@ -1,5 +1,5 @@
-from langchain_community.vectorstores import Chroma
-from .embedding_model import embedding_model_local, embedding_model_api
+from langchain_chroma import Chroma
+from .embedding_model import embedding_model_local
 
 
 class VectorStoreFactory:
@@ -8,11 +8,10 @@ class VectorStoreFactory:
         self,
         collection_name: str = "FinancialCollection",
         persistent_directory: str = "./database/chroma",
-        local: bool = True,
     ) -> Chroma:
         vector_store = Chroma(
             collection_name=collection_name,
-            embedding_function=embedding_model_local if local else embedding_model_api,
+            embedding_function=embedding_model_local,
             persist_directory=persistent_directory,
         )
 
