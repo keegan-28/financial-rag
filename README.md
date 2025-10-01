@@ -28,7 +28,7 @@ DAGSTER_HOME
 DOCUMENT_STORE_PATH
 VECTOR_STORE_COLLECTION
 VECTOR_STORE_PATH
-GEMINI_API_KEY
+GOOGLE_API_KEY
 ```
 
 ```bash
@@ -41,3 +41,12 @@ python3 src/rag/download_models/download_emb_model.py
 dagster dev
 ```
 Go to [Dagster UI](http://127.0.0.1:3000/)
+
+
+## Retriever
+
+To run queries, run:
+
+```bash
+python3 src/rag/retrieval/retriever.py 
+```

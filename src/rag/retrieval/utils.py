@@ -79,3 +79,29 @@ def format_docs_with_weight(docs: list[Document]) -> str:
             f"[Doc {i} | Source: {source}, Weight: {weight}]\n{doc.page_content}\n"
         )
     return "\n\n".join(formatted_chunks)
+
+
+def weight_chunks_by_parent(
+    docs: list[Document], alpha: float = 0.7, beta: float = 0.3
+) -> list[dict]:
+    # Count frequency of parent_ids
+    parent_counts = Counter(
+        doc.metadata.get("parent_document_id")
+        for doc in docs
+        if "parent_document_id" in doc.metadata
+    )
+    max_count = max(parent_counts.values()) if parent_counts else 1
+
+    reranked: list[Document] = []
+    for doc in docs:
+        parent_id = doc.metadata.get("parent_document_id")
+        sim_score = doc.metadata.get("score", 1.0)
+        parent_boost = parent_counts.get(parent_id, 0) / max_count
+
+        weighted_score = alpha * sim_score + beta * parent_boost
+        doc.metadata["weighted_score"] = weighted_score
+        reranked.append(doc)
+
+    # Sort by new score, highest first
+    reranked.sort(key=lambda d: d.metadata["weighted_score"], reverse=True)
+    return reranked
