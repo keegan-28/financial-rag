@@ -4,7 +4,10 @@ from pathlib import Path
 from langchain_core.documents import Document
 from src.rag.document_parser import load_document
 from src.rag.document_chunking import RecursiveSplitter
-from src.rag.database_interaction.document_database import ChildDocuments, ParentDocuments
+from src.rag.database_interaction.document_database import (
+    ChildDocuments,
+    ParentDocuments,
+)
 from .resources import VectorStoreResource, DocumentStoreResource
 
 

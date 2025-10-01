@@ -11,7 +11,9 @@ def load_document(path: Path, use_api: bool = False) -> list[Document]:
     suffix = path.suffix.lower()
 
     if use_api:
-        loader = UnstructuredAPIFileLoader(file_path=str(path), url=UNSTRUCTURED_API_ENDPOINT, mode="elements")
+        loader = UnstructuredAPIFileLoader(
+            file_path=str(path), url=UNSTRUCTURED_API_ENDPOINT, mode="elements"
+        )
 
     if suffix == ".pdf":
         loader = PyPDFLoader(path, mode="single")

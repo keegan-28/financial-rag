@@ -13,7 +13,4 @@ embedding_model_local = HuggingFaceEmbeddings(
 )
 
 
-llm = ChatGoogleGenerativeAI(
-    model="gemini-2.0-flash",
-    max_retries=2
-)
+llm = ChatGoogleGenerativeAI(model="gemini-2.0-flash", max_retries=2)
