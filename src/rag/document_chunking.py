@@ -42,6 +42,7 @@ class DocumentSplitter(ABC):
                 source=doc.metadata["source"],
             )
             doc.metadata = metadata.model_dump()
+            doc.id = metadata.id
         return docs
 
 

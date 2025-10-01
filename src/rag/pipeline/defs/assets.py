@@ -4,6 +4,7 @@ from pathlib import Path
 from langchain_core.documents import Document
 from src.rag.document_parser import load_document
 from src.rag.document_chunking import RecursiveSplitter
+from src.rag.database_interaction.document_database import ChildDocuments, ParentDocuments
 from .resources import VectorStoreResource, DocumentStoreResource
 
 
@@ -30,19 +31,35 @@ def documents(datasets: list[Path]) -> list[Document]:
 
 
 @dg.asset(deps=[documents])
-def chunked_documents(
+def chunked_parents(
     documents: list[Document], document_store_resource: DocumentStoreResource
 ) -> list[Document]:
     document_store = document_store_resource.get_client()
-    logger.info(f"Chunking {len(documents)} documents.")
+    recursive_splitter = RecursiveSplitter(5000, 0)
+    parent_chunks: list[Document] = []
+
+    for doc in documents:
+        parent_chunks.extend(recursive_splitter.split(doc))
+
+    document_store.write_documents(parent_chunks, ParentDocuments)
+    logger.info(f"Created and stored {len(parent_chunks)} parent chunks.")
+    return parent_chunks
+
+
+@dg.asset(deps=[chunked_parents])
+def chunked_documents(
+    chunked_parents: list[Document], document_store_resource: DocumentStoreResource
+) -> list[Document]:
+    document_store = document_store_resource.get_client()
+    logger.info(f"Chunking {len(chunked_parents)} parent documents.")
     recursive_splitter = RecursiveSplitter(1000, 100)
     chunked_docs: list[Document] = []
 
-    for doc in documents:
+    for doc in chunked_parents:
         chunked_docs.extend(recursive_splitter.split(doc))
 
-    document_store.write_documents(chunked_docs)
-    logger.info(f"Created and stored {len(chunked_docs)} chunks.")
+    document_store.write_documents(chunked_docs, ChildDocuments)
+    logger.info(f"Created {len(chunked_docs)} child chunks.")
     return chunked_docs
 
 

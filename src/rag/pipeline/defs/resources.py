@@ -30,5 +30,5 @@ document_store_resource = DocumentStoreResource(
 vector_store_resource = VectorStoreResource(
     collection_name=EnvVar("VECTOR_STORE_COLLECTION"),
     database_path=EnvVar("VECTOR_STORE_PATH"),
-    api_key=EnvVar("GEMINI_API_KEY"),
+    api_key=EnvVar("GOOGLE_API_KEY"),
 )
